@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
 
-import IERC721 from ".";
-import IERC721Reicever from ".";
+import {IERC721} from "./IERC721.sol";
+import {IERC165} from "./IERC165.sol";
+import {IERC721Receiver} from "./IERC721Receiver.sol";
 
 contract YannArt42 is IERC721 {
 
@@ -10,25 +13,25 @@ contract YannArt42 is IERC721 {
     mapping(address => mapping (address => bool)) _approvalsAll;
 
     function balanceOf(address owner) external view returns (uint256 balance) {
-        require(_balances[owner]);
+        return (_balances[owner]);
     }
 
     function ownerOf(uint256 tokenId) external view returns (address owner) {
-        uint256 owner = _owners[tokenId];
-        require(owner != 0, "This token doesn't exist");
-        return _owners[tokenId];
+        address current_owner = _owners[tokenId];
+        require(current_owner != address(0), "This token doesn't exist");
+        return current_owner;
     }    
 
     function _checkTransferAllowed(address from, address to, uint256 tokenId) internal view {
-        require(from != 0, "from adress can't be 0");
-        require(to != 0, "to adress can't be 0");
-        uint256 owner = _owners[tokenId];
-        require(owner != 0, "This token doesn't exist");
+        require(from != address(0), "from adress can't be 0");
+        require(to != address(0), "to adress can't be 0");
+        address owner = _owners[tokenId];
+        require(owner != address(0), "This token doesn't exist");
         require(owner == from, "You are not the propritary of the token");
         if (msg.sender != from)
         {
-            require((_approvalAll[from][msg.sender] == true 
-            || _approvals[tokenId] == msg.sender), 
+            require((_approvalsAll[from][msg.sender] == true 
+            || _approval[tokenId] == msg.sender), 
             "You're not allowed to move this token");
         }
     }
@@ -40,11 +43,10 @@ contract YannArt42 is IERC721 {
         delete _approval[tokenId];
         if (to.code.length > 0)
         {
-            try {
+            try 
                 IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, data) returns (bytes4 hash) {
                     require (hash == IERC721Receiver.onERC721Received.selector);
                 }
-            }
              catch {
                 revert("SmartContract doesn't handle nft");
              }
@@ -59,11 +61,10 @@ contract YannArt42 is IERC721 {
         delete _approval[tokenId];
         if (to.code.length > 0)
         {
-            try {
-                IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId) returns (bytes4 hash) {
+            try 
+                IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, "") returns (bytes4 hash) {
                     require (hash == IERC721Receiver.onERC721Received.selector);
                 }
-            }
              catch {
                 revert("SmartContract doesn't handle nft");
              }
@@ -72,11 +73,11 @@ contract YannArt42 is IERC721 {
     }
 
     function approve(address to, uint256 tokenId) external {
-        uint256 owner = _owners[tokenId];
-        require(owner != 0, "This token doesn't exist");
+        address owner = _owners[tokenId];
+        require(owner != address(0), "This token doesn't exist");
         require(owner == msg.sender, "You are not the proprietary of the token");
-        _approve[tokenId] = to;
-        emit Approval(msg.sender, to, tokenId)
+        _approval[tokenId] = to;
+        emit Approval(msg.sender, to, tokenId);
     }
 
     function transferFrom(address from, address to, uint256 tokenId) external {
@@ -87,15 +88,15 @@ contract YannArt42 is IERC721 {
     }
 
     function setApprovalForAll(address operator, bool approved) external {
-        require(operator != 0, "to adress can't be 0");
+        require(operator != address(0), "to adress can't be 0");
         _approvalsAll[msg.sender][operator] = approved;
-        emit ApprovalForAll(msg.sender, to, tokenId)
+        emit ApprovalForAll(msg.sender, operator, approved);
     }
 
     function getApproved(uint256 tokenId) external view returns (address operator)
     {
-        uint256 owner = _owners[tokenId];
-        require(owner != 0, "This token doesn't exist");
+        address owner = _owners[tokenId];
+        require(owner != address(0), "This token doesn't exist");
         return _approval[tokenId];
     }
 
@@ -103,9 +104,9 @@ contract YannArt42 is IERC721 {
         return (_approvalsAll[owner][operator]);
     }
 
-    function supportInterfaces(bytes4 interfaceId) external view returns (bool) {
-        return type(EIRC165).interfaceId == interfaceId ||
-               type(EIRC721).interfaceId == interfaceId;
+    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
+        return type(IERC721).interfaceId == interfaceId ||
+               type(IERC165).interfaceId == interfaceId;
     }
 
     }
