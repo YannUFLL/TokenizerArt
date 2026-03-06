@@ -4,13 +4,47 @@ pragma solidity ^0.8.28;
 import {IERC721} from "./IERC721.sol";
 import {IERC165} from "./IERC165.sol";
 import {IERC721Receiver} from "./IERC721Receiver.sol";
+import {IERC721Metadata} from "./IERC721Metadata.sol";
 
-contract YannArt42 is IERC721 {
+contract YannArt42 is IERC721, IERC721Metadata {
 
-    mapping(uint256 => address) _owners;
-    mapping(address => uint256) _balances;
-    mapping(uint256 => address) _approval;
-    mapping(address => mapping (address => bool)) _approvalsAll;
+    mapping(uint256 => address) private _owners;
+    mapping(address => uint256) private _balances;
+    mapping(uint256 => address) private _approval;
+    mapping(address => mapping (address => bool)) private _approvalsAll;
+    mapping(uint256 => string) private _tokensURIs;
+
+    string private _baseURI;
+    uint256 private _tokensNb;
+    address private _owner;
+
+    modifier onlyOwner() {
+        require(msg.sender == _owner);
+        _;
+    }
+
+    function name() external pure returns (string memory){
+        return ("YannArt42");
+    }
+
+    function symbol() external pure returns (string memory) {
+        return ("YA42");
+    }
+
+    function tokenURI(uint256 tokenId) external view returns (string memory){
+        address current_owner = _owners[tokenId];
+        require(current_owner != address(0), "This token doesn't exist");
+        string storage uri = _tokensURIs[tokenId];
+        return string.concat(_baseURI, uri);
+    }
+
+    function mint(address to, string calldata metadata) onlyOwner external {
+
+    }
+
+    function setBaseURI(string calldata baseURI) external onlyOwner {
+        _baseURI = baseURI;
+    }
 
     function balanceOf(address owner) external view returns (uint256 balance) {
         return (_balances[owner]);
