@@ -1,0 +1,11 @@
+{
+    "name": "The one",
+    "description": "A signature of Yann Dumaine, a famouse student in 42Mulhouse",
+    "image": "ipfs://bafkreihkndfg5qu42thcmqp4c4ntkenhse6jxpqqqups3kysfm3npklzfu",
+    "attributes": [
+        {
+            "trait_type": "Artist",
+            "value": "YannArt42"
+        }
+    ]
+}
