@@ -99,7 +99,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
         if (msg.sender != from)
         {
             if (_operatorApprovals[from][msg.sender] != true 
-            || _tokenApprovals[tokenId] != msg.sender) {
+            && _tokenApprovals[tokenId] != msg.sender) {
                 revert CallerNotOwnerOrApproved(msg.sender, tokenId);
             }
         }
@@ -150,7 +150,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
         if (owner == address(0)) {
             revert NonexistentToken(tokenId);
         }
-        if (owner !=  msg.sender  || _operatorApprovals[owner][msg.sender] != true) {
+        if (owner !=  msg.sender  && _operatorApprovals[owner][msg.sender] != true) {
             revert CallerNotOwnerOrApproved(msg.sender, tokenId);
         }
         _tokenApprovals[tokenId] = to;
