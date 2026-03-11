@@ -115,7 +115,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
     function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data) external {
         _checkTransferAllowed(from, to, tokenId);
         _transfer(from, to, tokenId);
-
+        emit Transfer(from, to, tokenId);
         if (to.code.length > 0)
         {
             try 
@@ -126,12 +126,12 @@ contract YannArt42 is IERC721, IERC721Metadata {
                 revert NoNFTSupport();
              }
         }
-        emit Transfer(from, to, tokenId);
     }
 
     function safeTransferFrom(address from, address to, uint256 tokenId) external {
         _checkTransferAllowed(from, to, tokenId);
         _transfer(from, to, tokenId);
+        emit Transfer(from, to, tokenId);
         if (to.code.length > 0)
         {
             try 
@@ -142,7 +142,6 @@ contract YannArt42 is IERC721, IERC721Metadata {
                 revert NoNFTSupport();
              }
         }
-        emit Transfer(from, to, tokenId);
     }
 
     function approve(address to, uint256 tokenId) external {
