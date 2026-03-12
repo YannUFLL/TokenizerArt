@@ -11,6 +11,8 @@ contract YannArt42 is IERC721, IERC721Metadata {
     string private constant NAME = "YannArt42";
     string private constant SYMBOL = "YA42";
 
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
     error NotTokenOwner(address caller, uint256 tokenId);
     error NonexistentToken(uint256 tokenId);
     error TransferFromZeroAddress();
@@ -44,6 +46,14 @@ contract YannArt42 is IERC721, IERC721Metadata {
 
     function symbol() external pure returns (string memory) {
         return SYMBOL;
+    }
+
+    function TransferOwnership(address newOwner) external onlyOwner {
+        if (newOwner == address(0)) {
+            revert TransferToZeroAddress();
+        }
+        emit OwnershipTransferred(_contractOwner, newOwner);
+        _contractOwner = newOwner;
     }
 
     function tokenURI(uint256 tokenId) external view returns (string memory){
@@ -94,7 +104,6 @@ contract YannArt42 is IERC721, IERC721Metadata {
         }
         if (owner != from) {
             revert NotTokenOwner(from, tokenId);
-
         }
         if (msg.sender != from)
         {
