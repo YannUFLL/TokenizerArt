@@ -29,8 +29,10 @@ contract YannArt42 is IERC721, IERC721Metadata {
 
     string private _baseURI;
     uint256 private _nextTokenId;
+    // Administrative owner of the contract (separate from NFT owners).
     address private _contractOwner;
 
+    // Restricts sensitive actions (mint, base URI update, ownership transfer).
     modifier onlyOwner() {
         require(msg.sender == _contractOwner);
         _;
@@ -68,6 +70,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
     function mint(address to, string calldata uri) onlyOwner external {
         if (to == address(0)) 
             revert InvalidZeroAddress();
+        // Minting uses a monotonically increasing token ID.
         _owners[_nextTokenId] = to;
         _balances[to] += 1;
         _tokenURIs[_nextTokenId] = uri;
@@ -107,6 +110,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
         }
         if (msg.sender != from)
         {
+            // Caller must be approved specifically or as operator.
             if (_operatorApprovals[from][msg.sender] != true 
             && _tokenApprovals[tokenId] != msg.sender) {
                 revert CallerNotOwnerOrApproved(msg.sender, tokenId);
@@ -115,6 +119,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
     }
 
     function _transfer(address from, address to, uint256 tokenId) internal {
+        // Clear one-time approval on transfer, as required by ERC721.
         _owners[tokenId] = to;
         delete _tokenApprovals[tokenId];
         _balances[from] -= 1;
@@ -125,6 +130,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
         _checkTransferAllowed(from, to, tokenId);
         _transfer(from, to, tokenId);
         emit Transfer(from, to, tokenId);
+        // If recipient is a contract, it must acknowledge ERC721 receipt.
         if (to.code.length > 0)
         {
             try 
@@ -192,6 +198,7 @@ contract YannArt42 is IERC721, IERC721Metadata {
     }
 
     function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
+        // Advertise ERC165, ERC721, and ERC721Metadata compatibility.
         return type(IERC721).interfaceId == interfaceId ||
                type(IERC165).interfaceId == interfaceId ||
                type(IERC721Metadata).interfaceId == interfaceId;
