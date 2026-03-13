@@ -28,7 +28,10 @@ contract YannArt42 is IERC721, IERC721Metadata {
     mapping(uint256 => string) private _tokenURIs;
 
     string private _baseURI;
-    uint256 private _nextTokenId;
+
+    // public token ID counter, starts at 0 and increments with each mint.
+    uint256 public nextTokenId;
+
     // Administrative owner of the contract (separate from NFT owners).
     address private _contractOwner;
 
@@ -68,14 +71,14 @@ contract YannArt42 is IERC721, IERC721Metadata {
     }
 
     function mint(address to, string calldata uri) onlyOwner external {
-        if (to == address(0)) 
+        
             revert InvalidZeroAddress();
         // Minting uses a monotonically increasing token ID.
-        _owners[_nextTokenId] = to;
+        _owners[nextTokenID] = to;
         _balances[to] += 1;
-        _tokenURIs[_nextTokenId] = uri;
-        emit Transfer(address(0), to, _nextTokenId);
-        _nextTokenId++;
+        _tokenURIs[nextTokenID] = uri;
+        emit Transfer(address(0), to, nextTokenID);
+        nextTokenID++;
     }
 
     function setBaseURI(string calldata newBaseURI) external onlyOwner {
