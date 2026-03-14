@@ -72,13 +72,15 @@ contract YannArt42 is IERC721, IERC721Metadata {
 
     function mint(address to, string calldata uri) onlyOwner external {
         
+        if (to == address(0)) {
             revert InvalidZeroAddress();
+        }
         // Minting uses a monotonically increasing token ID.
-        _owners[nextTokenID] = to;
+        _owners[nextTokenId] = to;
         _balances[to] += 1;
-        _tokenURIs[nextTokenID] = uri;
-        emit Transfer(address(0), to, nextTokenID);
-        nextTokenID++;
+        _tokenURIs[nextTokenId] = uri;
+        emit Transfer(address(0), to, nextTokenId);
+        nextTokenId++;
     }
 
     function setBaseURI(string calldata newBaseURI) external onlyOwner {
