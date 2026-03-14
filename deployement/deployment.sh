@@ -2,6 +2,15 @@
 
 set -e
 
+cd ../code
+
+if [ ! -d "node_modules" ]; then
+    echo "📦 node_modules not found. Installing dependencies..."
+    npm install
+else
+    echo "✅ Dependencies already installed."
+fi
+
 checks_var() {
     VAR_NAME=$1
     if npx hardhat vars list | grep -q "$VAR_NAME"; then 
