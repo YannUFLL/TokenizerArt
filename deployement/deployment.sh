@@ -30,5 +30,5 @@ npx hardhat compile
 if [[ -f ignition/deployments/chain-11155111/deployed_addresses.json ]]; then
     echo "Contract already deploy at $(cat ignition/deployments/chain-11155111/deployed_addresses.json)" 
 fi
-npx hardhat ignition deploy ignition/modules/YannArt42.ts --network sepolia --verify
+npx hardhat ignition deploy ignition/modules/Twingo42.ts --network sepolia --verify
 npx hardhat console --network sepolia

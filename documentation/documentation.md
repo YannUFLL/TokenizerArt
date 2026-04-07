@@ -105,7 +105,7 @@ function isApprovedForAll(address owner, address operator) external view returns
 
 Returns `true` if an address is an operator for all NFTs of the owner; otherwise returns `false`.
 
-## YannArt42 api Layer
+## Twingo42 api Layer
 
 contract.nextTokenID();
 

@@ -6,10 +6,10 @@ import {IERC165} from "./IERC165.sol";
 import {IERC721Receiver} from "./IERC721Receiver.sol";
 import {IERC721Metadata} from "./IERC721Metadata.sol";
 
-contract YannArt42 is IERC721, IERC721Metadata {
+contract Twingo42 is IERC721, IERC721Metadata {
 
-    string private constant NAME = "YannArt42";
-    string private constant SYMBOL = "YA42";
+    string private constant NAME = "Twingo42";
+    string private constant SYMBOL = "T42";
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
