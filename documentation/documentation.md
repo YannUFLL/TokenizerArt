@@ -105,10 +105,101 @@ function isApprovedForAll(address owner, address operator) external view returns
 
 Returns `true` if an address is an operator for all NFTs of the owner; otherwise returns `false`.
 
-## Twingo42 api Layer
+## Twingo42 Contract API
 
-contract.nextTokenID();
+### Contract Address
+- **Network**: Ethereum Sepolia Testnet
+- **Address**: `0xE644D6ca5437E74b4e2a444b6e980132695A9033`
 
-## Minting: 
+### Public Functions
 
-the minting is generate by the owner of the contract, it is his responsibilty to generate all the 
+```solidity
+function nextTokenId() external view returns (uint256);
+```
+Returns the next token ID to be minted.
+
+```solidity
+function name() external pure returns (string memory);
+```
+Returns the token collection name: "Twingo42".
+
+```solidity
+function symbol() external pure returns (string memory);
+```
+Returns the token collection symbol: "T42".
+
+```solidity
+function mint(address to, string calldata uri) external onlyOwner;
+```
+Mints a new NFT to the specified address. Only callable by the contract owner.
+
+```solidity
+function tokenURI(uint256 tokenId) external view returns (string memory);
+```
+Returns the metadata URI (IPFS CID) for a specific token.
+
+```solidity
+function ownerOf(uint256 tokenId) external view returns (address owner);
+```
+Returns the owner of a specific token.
+
+```solidity
+function balanceOf(address owner) external view returns (uint256 balance);
+```
+Returns the number of NFTs owned by an address.
+
+```solidity
+function setBaseURI(string calldata newBaseURI) external onlyOwner;
+```
+Updates the base URI for all tokens. Only callable by the contract owner.
+
+```solidity
+function TransferOwnership(address newOwner) external onlyOwner;
+```
+Transfers contract ownership to a new address.
+
+## How to Use the NFT
+
+### Prerequisites
+1. A Web3 wallet (MetaMask, Rabby, etc.)
+2. Sepolia ETH for gas fees
+3. Connect to Sepolia network
+
+### Viewing Your NFT
+1. Open a blockchain explorer like [Etherscan](https://sepolia.etherscan.io/)
+2. Enter the contract address: `0xE644D6ca5437E74b4e2a444b6e980132695A9033`
+3. Navigate to the "Contract" tab to read/write the contract
+
+### Checking Ownership
+Use the `ownerOf` function on Etherscan:
+1. Go to the contract page
+2. Click "Read Contract"
+3. Find "ownerOf" and enter a token ID
+4. The function returns the wallet address owning that NFT
+
+### Minting Process
+The minting is managed by the contract owner. To mint a new NFT:
+1. Connect to the admin panel (see README)
+2. Generate an NFT using AI or upload your own image
+3. The system uploads the image and metadata to IPFS
+4. The contract owner calls the `mint` function with the recipient address and IPFS URI
+
+### Metadata Structure
+Each NFT follows the ERC721 Metadata standard:
+```json
+{
+  "name": "42 Twingo #001",
+  "description": "Description of the NFT",
+  "artist": "ydumaine",
+  "image": "ipfs://<image_cid>",
+  "attributes": [
+    { "trait_type": "Background", "value": "..." },
+    { "trait_type": "Decals", "value": "..." }
+  ]
+}
+```
+
+## Security Features
+- **OnlyOwner Modifier**: Minting and administrative functions are restricted to the contract owner
+- **Input Validation**: All functions check for zero addresses and non-existent tokens
+- **Approval System**: Token owners can approve specific addresses or operators to transfer their NFTs 
