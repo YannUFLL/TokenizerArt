@@ -19,6 +19,7 @@ export interface Trait {
 
 export interface TwingoNFT {
   id: string;
+  name?: string;
   image: string | null;
   traits: Trait[];
   description?: string;

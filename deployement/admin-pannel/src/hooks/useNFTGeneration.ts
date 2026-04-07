@@ -20,6 +20,7 @@ export const useNFTGeneration = (nextTokenId: bigint) => {
 
       const newNFT: TwingoNFT = {
         id: `42 Twingo #${nextTokenId.toString().padStart(3, '0')}`,
+        name: `42 Twingo #${nextTokenId.toString().padStart(3, '0')}`,
         image: imageUrl,
         traits,
         descriptionKeyword,

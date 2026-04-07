@@ -53,6 +53,7 @@ export const CollectionHistory: React.FC<CollectionHistoryProps> = ({
                   onClick={() => {
                     onSelectNFT({
                       id: `Twingo #${nft.id}`,
+                      name: nft.name,
                       image: nft.image,
                       traits: nft.traits || [],
                       description: nft.description,

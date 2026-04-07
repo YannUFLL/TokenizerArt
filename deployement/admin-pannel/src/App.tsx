@@ -655,7 +655,7 @@ export default function App() {
               <span className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
                 <Info className="w-3 h-3" /> {mintMode === 'manual' ? 'Metadata_Editor' : 'Metadata_Inspector'}
               </span>
-              <span className="text-[10px] font-bold">{mintMode === 'manual' ? 'MANUAL_ENTRY' : (currentNFT?.id || 'ID_PENDING')}</span>
+              <span className="text-[10px] font-bold">{mintMode === 'manual' ? 'MANUAL_ENTRY' : (currentNFT?.name || currentNFT?.id || 'ID_PENDING')}</span>
             </div>
             <div className="p-6 space-y-4">
               {mintMode === 'manual' ? (
