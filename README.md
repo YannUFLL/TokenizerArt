@@ -28,7 +28,7 @@ To deploy the smart contract, navigate to the `deployment` folder and run:
 
 This project includes a web application to simplify interactions with the smart contract.
 
-To use the **admin panel**, navigate to `deployment/admin-panel`, configure your `.env` file, and run:
+To use the **admin panel**, navigate to `deployment/admin-panel`, configure your `deployment/admin-panel/.env` file, and run:
 
 1. `npm install`
 2. `npm run dev`
