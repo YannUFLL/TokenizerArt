@@ -2,6 +2,14 @@
 
 ## Technical choices
 
+### Contract Type
+This project uses an **ERC-721 standard contract with owner-only minting**.
+
+- **Standard**: ERC-721 (non-fungible token)
+- **Supply**: Open supply - no fixed maximum, tokens are minted incrementally via `nextTokenId` counter
+- **Minting**: Only the contract owner can mint new NFTs (protected by `onlyOwner` modifier)
+- **Transfer**: Anyone can transfer NFTs they own (standard ERC-721 transfer functions)
+
 ### Blockchain: Ethereum (Sepolia testnet)
 
 Ethereum is the pioneering and most **renowned blockchain** for smart contract deployment. Consequently, there is a vast amount of documentation and community support available.
@@ -178,11 +186,49 @@ Use the `ownerOf` function on Etherscan:
 4. The function returns the wallet address owning that NFT
 
 ### Minting Process
-The minting is managed by the contract owner. To mint a new NFT:
-1. Connect to the admin panel (see README)
-2. Generate an NFT using AI or upload your own image
-3. The system uploads the image and metadata to IPFS
-4. The contract owner calls the `mint` function with the recipient address and IPFS URI
+
+The minting is managed by the contract owner via the **Admin Panel**.
+
+#### Admin Panel Features
+
+1. **AI Generation** - Generate unique NFT images using AI (Gemini API)
+   - automatically selects traits based on pre-configured probability weights
+   - Image is generated and uploaded to IPFS automatically if user is satisfied of it
+
+2. **Manual Upload** - Upload your own image
+   - Import and upload any image in your disk (usefull for custom twingos for example)
+
+3. **Manual Mint** - Direct smart contract interaction
+   - Enter any recipient address and IPFS URI
+   - Bypass image generation entirely
+   - For advanced users familiar with IPFS
+
+4. **Explorer** - Smart Contract Browser
+   - Check ownership of any token via `ownerOf`
+   - View token metadata and images
+
+#### Prerequisites
+1. Node.js 18+
+2. Pinata API key (for IPFS storage)
+3. Gemini API key (for AI generation)
+4. Web3 wallet with Sepolia ETH
+5. Contract owner wallet (for minting)
+
+#### Setup
+```bash
+cd deployement/admin-panel
+cp .env.example .env
+# Edit .env with your API keys and contract address
+npm install
+npm run dev
+```
+
+#### Usage Flow
+1. Connect your Web3 wallet (MetaMask, Rabby, etc.)
+2. Choose mint mode: AI / Manual Upload / Direct
+3. Generate or upload your image
+4. Confirm minting - image/metadata upload to IPFS + smart contract call
+5. View your NFT in the Explorer
 
 ### Metadata Structure
 Each NFT follows the ERC721 Metadata standard:
