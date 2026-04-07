@@ -671,7 +671,7 @@ export default function App() {
                   <div className="border-b border-[#141414]/10 pb-2">
                     <p className="text-[10px] opacity-50 uppercase">Protocol Description</p>
                     <p className="text-[10px] font-bold italic leading-relaxed">
-                      "Experimental Twingo units deployed via the 42 Twingos Protocol. Each vehicle is a unique digital asset merging 90s French automotive soul with cyberpunk aesthetics..."
+                      {currentNFT.description || "Experimental Twingo units deployed via the 42 Twingos Protocol. Each vehicle is a unique digital asset merging 90s French automotive soul with cyberpunk aesthetics..."}
                     </p>
                   </div>
                   {currentNFT.traits.map((trait, i) => (

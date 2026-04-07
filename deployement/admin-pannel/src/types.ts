@@ -21,6 +21,7 @@ export interface TwingoNFT {
   id: string;
   image: string | null;
   traits: Trait[];
+  description?: string;
   descriptionKeyword: string;
   timestamp: number;
 }

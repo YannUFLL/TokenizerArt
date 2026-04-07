@@ -66,7 +66,7 @@ export const fetchMintHistory = async () => {
           args: [tokenId]
         }) as string;
 
-        let metadata = { name: `Twingo #${tokenId}`, image: '' };
+        let metadata: any = { name: `Twingo #${tokenId}`, image: '', attributes: [], description: '' };
         
         const metadataUrl = resolveIpfs(uri);
         if (metadataUrl && metadataUrl.startsWith('http')) {
@@ -76,15 +76,30 @@ export const fetchMintHistory = async () => {
           }
         }
 
+        const traits = (metadata.attributes || []).map((attr: any) => ({
+          name: attr.trait_type || 'Trait',
+          value: attr.value || 'Unknown',
+          rarity: 'Common'
+        }));
+
+        // Add owner as a trait
+        traits.push({
+          name: 'Owner',
+          value: `${log.args.to.slice(0, 6)}...${log.args.to.slice(-4)}`,
+          rarity: 'Common'
+        });
+
         return {
           id: tokenId.toString(),
           name: metadata.name || `Twingo #${tokenId}`,
           image: metadata.image ? resolveIpfs(metadata.image) : null,
           owner: log.args.to,
+          traits: traits,
+          description: metadata.description,
           timestamp: Date.now(),
         };
       } catch (e) {
-        return { id: tokenId.toString(), name: `Twingo #${tokenId}`, image: null, owner: log.args.to, timestamp: Date.now() };
+        return { id: tokenId.toString(), name: `Twingo #${tokenId}`, image: null, owner: log.args.to, traits: [], timestamp: Date.now() };
       }
     }));
 

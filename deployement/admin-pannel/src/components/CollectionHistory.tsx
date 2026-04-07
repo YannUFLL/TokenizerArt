@@ -54,7 +54,8 @@ export const CollectionHistory: React.FC<CollectionHistoryProps> = ({
                     onSelectNFT({
                       id: `Twingo #${nft.id}`,
                       image: nft.image,
-                      traits: [{ name: 'Owner', value: `${nft.owner.slice(0,6)}...${nft.owner.slice(-4)}`, rarity: 'Common' }],
+                      traits: nft.traits || [],
+                      description: nft.description,
                       descriptionKeyword: 'Minted',
                       timestamp: nft.timestamp
                     });
